@@ -2,3 +2,5 @@ test-bin
 xcuserdata
 *.xccheckout
 .DS_Store
+
+.zig-cache

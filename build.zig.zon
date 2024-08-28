@@ -1,0 +1,13 @@
+.{
+    .name = "picohttpparser",
+    .version = "0.0.0",
+    .minimum_zig_version = "0.13.0",
+
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "picohttpparser.zig",
+        "picohttpparser.c",
+        "picohttpparser.h",
+    },
+}
