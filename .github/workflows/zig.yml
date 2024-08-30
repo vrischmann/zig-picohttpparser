@@ -1,0 +1,24 @@
+name: CI - Zig
+
+on:
+  create:
+  push:
+    branches: master
+  pull_request:
+  schedule:
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: goto-bus-stop/setup-zig@v2
+      - run: zig fmt --check .
+      - run: zig build
+      - run: zig build test
