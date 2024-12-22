@@ -1,0 +1,17 @@
+.{
+    .name = "picohttpparser",
+    .version = "0.0.0",
+    .dependencies = .{
+        .picohttpparser = .{
+            .url = "git+https://github.com/vrischmann/zig-picohttpparser-sys?ref=master#e94dd133d42e20df8ec8242c30f73b0195fa2133",
+            .hash = "122014652bae6247f160ae3b8b1ec2f3a99533eecaa5d4914054a77090b3e1a03a76",
+        },
+    },
+
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "picohttpparser.zig",
+        "LICENSE",
+    },
+}
