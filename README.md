@@ -6,6 +6,10 @@ This is a small Zig wrapper to use [picohttpparser](https://github.com/h2o/picoh
 
 This package leverages the Zig build system and is based on [zig-picohttpparser-sys](https://github.com/vrischmann/zig-picohttpparser-sys).
 
+# Supported Zig version
+
+Only Zig master is currently supported. Once 0.14.0 is released we should be able to support it.
+
 # Installation
 
 Use `zig fetch`:
