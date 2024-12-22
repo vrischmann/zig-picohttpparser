@@ -27,17 +27,13 @@ pub fn build(b: *std.Build) void {
     // Tests
     //
 
-    const tests_mod = b.createModule(.{
+    const tests = b.addTest(.{
         .target = target,
         .optimize = optimize,
         .root_source_file = b.path("picohttpparser.zig"),
     });
-    tests_mod.addIncludePath(picohttpparser.path("."));
-    tests_mod.linkLibrary(picohttpparser.artifact("picohttpparser"));
-
-    const tests = b.addTest(.{
-        .root_module = tests_mod,
-    });
+    tests.addIncludePath(picohttpparser.path("."));
+    tests.linkLibrary(picohttpparser.artifact("picohttpparser"));
 
     const run_tests = b.addRunArtifact(tests);
     const test_step = b.step("test", "Run the tests");
@@ -47,15 +43,11 @@ pub fn build(b: *std.Build) void {
     // Example module and binary
     //
 
-    const example_mod = b.createModule(.{
+    const example = b.addExecutable(.{
+        .name = "example",
         .root_source_file = b.path("example/main.zig"),
         .target = target,
         .optimize = optimize,
-    });
-
-    const example = b.addExecutable(.{
-        .name = "example",
-        .root_module = example_mod,
     });
 
     example.root_module.addImport("picohttpparser", mod);
