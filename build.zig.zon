@@ -1,6 +1,8 @@
 .{
     .name = "picohttpparser",
     .version = "0.0.0",
+    .minimal_zig_version = "0.13.0",
+
     .dependencies = .{
         .picohttpparser = .{
             .url = "git+https://github.com/vrischmann/zig-picohttpparser-sys?ref=master#e94dd133d42e20df8ec8242c30f73b0195fa2133",
