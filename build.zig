@@ -6,7 +6,10 @@ pub fn build(b: *std.Build) void {
 
     // NOTE(vincent): the upstream module containing the actual C library is also named picohttpparser.
 
-    const picohttpparser = b.dependency("picohttpparser", .{});
+    const picohttpparser = b.dependency("picohttpparser", .{
+        .target = target,
+        .optimize = optimize,
+    });
 
     const mod = b.addModule("picohttpparser", .{
         .root_source_file = b.path("picohttpparser.zig"),
