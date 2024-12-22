@@ -1,6 +1,8 @@
 # zig-picohttpparser
 
-This is a small Zig wrapper to use [picohttpparser](https://github.com/h2o/picohttpparser)
+This is a small Zig wrapper to use [picohttpparser](https://github.com/h2o/picohttpparser).
+
+`picohttpparser` could be used directly but this wrapper makes it feel more idiomatic Zig.
 
 This package leverages the Zig build system and is based on [zig-picohttpparser-sys](https://github.com/vrischmann/zig-picohttpparser-sys).
 
@@ -21,6 +23,15 @@ const picohttpparser = b.dependency("picohttpparser", .{
 
 your_exe.addImport("picohttpparser", picohttpparser.module("picohttpparser"));
 ```
+
+# Features implemented
+
+picohttpparser doesn't have many features. The following is a list of what is implemented in this wrapper.
+
+* [x] Parsing a request
+* [ ] Parsing a response
+* [ ] Parsing chunk-encoded data
+* [ ] Parsing headers only
 
 # Usage
 
@@ -65,3 +76,5 @@ const result = while (true) {
 ```
 
 Look into [example/main.zig](/example/main.zig) for a more complete example.
+
+You can also take a look at my project [zig-io_uring-http-server](https://github.com/vrischmann/zig-io_uring-http-server) where I [use `picohttpparser`](https://github.com/vrischmann/zig-io_uring-http-server/blob/master/src/lib.zig#L841-L855).
