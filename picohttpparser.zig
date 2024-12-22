@@ -93,7 +93,7 @@ pub const ParseRequestError = error{
     InvalidRequestData,
 };
 
-pub fn parseRequest(previous_buffer_len: usize, buffer: []const u8) ParseRequestError!?ParseRequestResult {
+pub fn parseRequest(buffer: []const u8, previous_buffer_len: usize) ParseRequestError!?ParseRequestResult {
     var req = RawRequest{};
 
     const res = c.phr_parse_request(
@@ -144,7 +144,7 @@ test "parseRequest" {
     };
 
     inline for (testCases) |tc| {
-        const result = try parseRequest(0, tc.input);
+        const result = try parseRequest(tc.input, 0);
         try testing.expect(result != null);
         try testing.expectEqual(tc.input.len, result.?.consumed);
 
@@ -163,7 +163,7 @@ test "raw request" {
 
     const raw_request_data = "GET / HTTP/1.0\r\nfoo: ab\r\nContent-Length: 200\r\n\r\n";
 
-    const result = try parseRequest(0, raw_request_data);
+    const result = try parseRequest(raw_request_data, 0);
     try testing.expect(result != null);
     try testing.expectEqual(raw_request_data.len, result.?.consumed);
 
