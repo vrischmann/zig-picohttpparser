@@ -1,12 +1,13 @@
 .{
-    .name = "picohttpparser",
+    .name = .picohttpparser,
+    .fingerprint = 0x1b2f3dfe7f30fba8,
     .version = "0.0.0",
     .minimal_zig_version = "0.14.0",
 
     .dependencies = .{
         .picohttpparser = .{
-            .url = "git+https://github.com/allyourcodebase/picohttpparser?ref=master#fa2ce121e836bf1e4c8f1b4ce30fad88bb0903b6",
-            .hash = "1220415fb26a2fb8c2bafc9026fcc7458b691e8d62100df6440b8bf82ddc44a92761",
+            .url = "git+https://github.com/allyourcodebase/picohttpparser?ref=zig-master#1549e088ad9a49a90652e4cf15109a50b67f3d42",
+            .hash = "picohttpparser-0.0.0-r0YzO70NAABeC1IjPiWKDEbCwGLGRV0KLoU1vc6Y3RSu",
         },
     },
 
