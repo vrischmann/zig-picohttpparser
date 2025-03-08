@@ -6,8 +6,8 @@
 
     .dependencies = .{
         .picohttpparser = .{
-            .url = "git+https://github.com/allyourcodebase/picohttpparser?ref=zig-master#1549e088ad9a49a90652e4cf15109a50b67f3d42",
-            .hash = "picohttpparser-0.0.0-r0YzO70NAABeC1IjPiWKDEbCwGLGRV0KLoU1vc6Y3RSu",
+            .url = "git+https://github.com/allyourcodebase/picohttpparser?ref=master#91ba35a60ac5a9fde09133b8733803a483ede0e6",
+            .hash = "picohttpparser-0.0.0-r0YzO5UNAAD8WbIv--3soE3YqO1ctxNozYsPokF_3_oT",
         },
     },
 
