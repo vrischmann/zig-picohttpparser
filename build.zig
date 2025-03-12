@@ -4,8 +4,6 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    // NOTE(vincent): the upstream module containing the actual C library is also named picohttpparser.
-
     const picohttpparser = b.dependency("picohttpparser", .{
         .target = target,
         .optimize = optimize,
@@ -14,7 +12,6 @@ pub fn build(b: *std.Build) void {
     //
     // Main module
     //
-
     const mod = b.addModule("picohttpparser", .{
         .root_source_file = b.path("picohttpparser.zig"),
         .target = target,
@@ -26,7 +23,6 @@ pub fn build(b: *std.Build) void {
     //
     // Tests
     //
-
     const tests = b.addTest(.{
         .target = target,
         .optimize = optimize,
@@ -40,12 +36,24 @@ pub fn build(b: *std.Build) void {
     test_step.dependOn(&run_tests.step);
 
     //
-    // Example module and binary
+    // Example executables
     //
+    addExample(b, mod, "parse_request", "example/parse_request.zig", target, optimize);
+    addExample(b, mod, "parse_response", "example/parse_response.zig", target, optimize);
+}
 
+/// Helper function to add example binaries.
+fn addExample(
+    b: *std.Build,
+    mod: *std.Build.Module,
+    name: []const u8,
+    path: []const u8,
+    target: std.Build.ResolvedTarget,
+    optimize: std.builtin.OptimizeMode,
+) void {
     const example = b.addExecutable(.{
-        .name = "example",
-        .root_source_file = b.path("example/main.zig"),
+        .name = name,
+        .root_source_file = b.path(path),
         .target = target,
         .optimize = optimize,
     });
@@ -57,6 +65,6 @@ pub fn build(b: *std.Build) void {
         example_run_cmd.addArgs(args);
     }
 
-    const example_run = b.step("example", "Run the example");
+    const example_run = b.step(name, b.fmt("Run {s} example", .{name}));
     example_run.dependOn(&example_run_cmd.step);
 }
