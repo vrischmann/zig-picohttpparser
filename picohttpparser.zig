@@ -117,6 +117,61 @@ pub fn parseRequest(buffer: []const u8, previous_buffer_len: usize) ParseRequest
     };
 }
 
+pub const RawResponse = struct {
+    pub const max_headers = 100;
+
+    minor_version: c_int = 0,
+    status: c_int = 0,
+    msg: [*c]u8 = undefined,
+    msg_len: usize = undefined,
+    headers: [max_headers]c.phr_header = undefined,
+    num_headers: usize = max_headers,
+
+    pub fn getStatus(self: RawResponse) c_int {
+        return self.status;
+    }
+
+    pub fn getMessage(self: RawResponse) []const u8 {
+        return self.msg[0..self.msg_len];
+    }
+
+    pub fn getMinorVersion(self: RawResponse) usize {
+        return @as(usize, @intCast(self.minor_version));
+    }
+};
+
+pub const ParseResponseResult = struct {
+    raw_response: RawResponse,
+    consumed: usize,
+};
+
+pub const ParseResponseError = error{
+    InvalidResponseData,
+};
+
+pub fn parseResponse(buffer: []const u8, previous_buffer_len: usize) ParseResponseError!?ParseResponseResult {
+    var res = RawResponse{};
+
+    const parsed_len = c.phr_parse_response(
+        buffer.ptr,
+        buffer.len,
+        &res.minor_version,
+        &res.status,
+        @as([*c][*c]const u8, @ptrCast(&res.msg)),
+        &res.msg_len,
+        &res.headers,
+        &res.num_headers,
+        previous_buffer_len,
+    );
+    if (parsed_len == -1) return error.InvalidResponseData;
+    if (parsed_len == -2) return null;
+
+    return ParseResponseResult{
+        .raw_response = res,
+        .consumed = @as(usize, @intCast(parsed_len)),
+    };
+}
+
 test "parseRequest" {
     const TestCase = struct {
         input: []const u8,
