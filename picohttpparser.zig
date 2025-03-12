@@ -232,6 +232,68 @@ test "raw request" {
     try testing.expectEqualSlices(RawHeader, headers_storage[0..num_headers], headers2);
 }
 
+test "parseResponse" {
+    const TestCase = struct {
+        input: []const u8,
+        minor_version: usize,
+        status: c_int,
+        message: []const u8,
+    };
+
+    const testCases = &[_]TestCase{
+        .{
+            .input = "HTTP/1.1 200 OK\r\nContent-Length: 100\r\n\r\n",
+            .minor_version = 1,
+            .status = 200,
+            .message = "OK",
+        },
+        .{
+            .input = "HTTP/1.0 404 Not Found\r\nConnection: close\r\n\r\n",
+            .minor_version = 0,
+            .status = 404,
+            .message = "Not Found",
+        },
+    };
+
+    inline for (testCases) |tc| {
+        const result = try parseResponse(tc.input, 0);
+        try testing.expect(result != null);
+        try testing.expectEqual(tc.input.len, result.?.consumed);
+
+        const res = result.?.raw_response;
+
+        try testing.expectEqual(tc.status, res.getStatus());
+        try testing.expectEqual(tc.minor_version, res.getMinorVersion());
+        try testing.expectEqualStrings(tc.message, res.getMessage());
+    }
+}
+
+test "raw response" {
+    var arena = std.heap.ArenaAllocator.init(testing.allocator);
+    defer arena.deinit();
+
+    const raw_response_data = "HTTP/1.1 200 OK\r\nContent-Length: 100\r\n\r\n";
+
+    const result = try parseResponse(raw_response_data, 0);
+    try testing.expect(result != null);
+    try testing.expectEqual(raw_response_data.len, result.?.consumed);
+
+    const res = result.?.raw_response;
+
+    var headers_storage: [RawResponse.max_headers]RawHeader = undefined;
+    const num_headers = @min(res.num_headers, headers_storage.len);
+    for (0..num_headers) |i| {
+        headers_storage[i] = RawHeader{
+            .name = res.headers[i].name[0..res.headers[i].name_len],
+            .value = res.headers[i].value[0..res.headers[i].value_len],
+        };
+    }
+
+    const headers2 = try arena.allocator().alloc(RawHeader, num_headers);
+    @memcpy(headers2, headers_storage[0..num_headers]);
+    try testing.expectEqualSlices(RawHeader, headers_storage[0..num_headers], headers2);
+}
+
 test {
     testing.refAllDecls(@This());
 }

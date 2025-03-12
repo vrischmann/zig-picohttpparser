@@ -4,6 +4,7 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
+    // NOTE(vincent): the upstream module containing the actual C library is also named picohttpparser.
     const picohttpparser = b.dependency("picohttpparser", .{
         .target = target,
         .optimize = optimize,
